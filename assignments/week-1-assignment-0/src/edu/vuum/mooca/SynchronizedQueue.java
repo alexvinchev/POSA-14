@@ -246,6 +246,8 @@ public class SynchronizedQueue {
                         try {
                             System.out.println("Put:" + counter);
                             mQueue.put(counter++);
+                            // Following line is placed to test that consumer is pumping whole queue
+                            // Thread.sleep(1);
                         } catch (InterruptedException e) {
                             return;
                         } catch (TimeoutException e) {
@@ -273,9 +275,12 @@ public class SynchronizedQueue {
 
             // TODO - you fill in here to wait for the threads to
             // exit.
-            while (producer.isAlive() || consumer.isAlive()) {
-                Thread.sleep(100);
-            }
+            producer.join();
+            consumer.join();
+            // Or the following implementation:
+            // while (producer.isAlive() || consumer.isAlive()) {
+            //     Thread.sleep(100);
+            // }
 
             // Do some sanity checking to see if the Threads work as
             // expected.
